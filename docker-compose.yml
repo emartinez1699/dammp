@@ -8,7 +8,9 @@ services:
         container_name: ${CONTAINER_NAME}-mysql
         environment:
             - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-
+        build:
+            context: .
+            dockerfile: Dockerfile.mysql
         volumes:
             # Montamos un volumen para MySQL para no perder los datos de bd
             - ./volumenes/mysql:/var/lib/mysql
@@ -18,56 +20,56 @@ services:
         networks:
             - internal
 
-    php56:
-        #platform: linux/x86_64
-        image: chialab/php:5.6-apache
-        container_name: ${CONTAINER_NAME}-php56
-        restart: always
-        volumes:
-            # Montamos nuestra web desde fuera en el directorio web del contenedor
-            - ./htdocs:/var/www/html
-            - ./config/php/php.ini-development:/usr/local/etc/php/php.ini
-        links: 
-            - mysql
-            - mailhog
-        networks:
-            - internal
-        ports:
-            - 8056:80
+    # php56:
+    #     #platform: linux/x86_64
+    #     image: chialab/php:5.6-apache
+    #     container_name: ${CONTAINER_NAME}-php56
+    #     restart: always
+    #     volumes:
+    #         # Montamos nuestra web desde fuera en el directorio web del contenedor
+    #         - ./htdocs:/var/www/html
+    #         - ./config/php/php.ini-development:/usr/local/etc/php/php.ini
+    #     links: 
+    #         - mysql
+    #         - mailhog
+    #     networks:
+    #         - internal
+    #     ports:
+    #         - 8056:80
 
-    php70:
-        #platform: linux/x86_64
-        image: chialab/php:7.0-apache
-        container_name: ${CONTAINER_NAME}-php70
-        restart: always
-        volumes:
-            # Montamos nuestra web desde fuera en el directorio web del contenedor
-            - ./htdocs:/var/www/html
-            - ./config/php/php.ini-development:/usr/local/etc/php/php.ini
-        links: 
-            - mysql
-            - mailhog
-        networks:
-            - internal
-        ports:
-            - 8070:80
+    # php70:
+    #     #platform: linux/x86_64
+    #     image: chialab/php:7.0-apache
+    #     container_name: ${CONTAINERmysqli::real_connect(): (HY000/1130): Host '172.21.0.5' is not allowed to connect to this MySQL server_NAME}-php70
+    #     restart: always
+    #     volumes:
+    #         # Montamos nuestra web desde fuera en el directorio web del contenedor
+    #         - ./htdocs:/var/www/html
+    #         - ./config/php/php.ini-development:/usr/local/etc/php/php.ini
+    #     links: 
+    #         - mysql
+    #         - mailhog
+    #     networks:
+    #         - internal
+    #     ports:
+    #         - 8070:80
 
-    php72:
-        #platform: linux/x86_64
-        image: chialab/php:7.2-apache
-        container_name: ${CONTAINER_NAME}-php72
-        restart: always
-        volumes:
-            # Montamos nuestra web desde fuera en el directorio web del contenedor
-            - ./htdocs:/var/www/html
-            - ./config/php/php.ini-development:/usr/local/etc/php/php.ini
-        links: 
-            - mysql
-            - mailhog
-        networks:
-            - internal
-        ports:
-            - 8072:80
+    # php72:
+    #     platform: linux/x86_64
+    #     image: chialab/php:7.2-apache
+    #     container_name: ${CONTAINER_NAME}-php72
+    #     restart: always
+    #     volumes:
+    #         # Montamos nuestra web desde fuera en el directorio web del contenedor
+    #         - ./htdocs:/var/www/html
+    #         - ./config/php/php.ini-development:/usr/local/etc/php/php.ini
+    #     links: 
+    #         - mysql
+    #         - mailhog
+    #     networks:
+    #         - internal
+    #     ports:
+    #         - 8072:80
 
     php74:
         #platform: linux/x86_64
@@ -80,30 +82,30 @@ services:
             - ./config/php/php.ini-development:/usr/local/etc/php/php.ini
         links: 
             - mysql
-            - mailhog
+            # - mailhog
         networks:
             - internal
         ports:
             - 8074:80
 
-    # phpmyadmin:
-    #     #platform: linux/x86_64
-    #     image: phpmyadmin/phpmyadmin
-    #     container_name: ${CONTAINER_NAME}-phpmyadmin
-    #     restart: always
-    #     volumes:
-    #         - ./config/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
-    #     environment:
-    #         PMA_HOSTS: mysql
-    #         UPLOAD_LIMIT: 100M
-    #     depends_on:
-    #         - mysql
-    #     links:
-    #         - mysql
-    #     ports:
-    #         - 8001:80
-    #     networks:
-    #         - internal
+    phpmyadmin:
+        #platform: linux/x86_64
+        image: phpmyadmin/phpmyadmin
+        container_name: ${CONTAINER_NAME}-phpmyadmin
+        restart: always
+        volumes:
+            - ./config/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+        environment:
+            PMA_HOSTS: mysql
+            UPLOAD_LIMIT: 100M
+        depends_on:
+            - mysql
+        links:
+            - mysql
+        ports:
+            - 8001:80
+        networks:
+            - internal
 
     mailhog:
         #platform: linux/x86_64
