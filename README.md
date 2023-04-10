@@ -68,3 +68,13 @@ Tengo un proyecto que se llama "prueba" que esta en la version 7.0 de PHP
 - Detener todos los contenedores: `docker-compose down` (solo funciona dentro del la carpeta raíz)
 - Volver a levantar los contenedores: `docker-compose up -d` (solo funciona dentro del la carpeta raíz)
 - Como saber mi IP: `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <contenedor>`. Ejemplo: `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'  dampp-php74`
+
+## Explicacion MYSQL 8
+- Cree un archivo bash en config/mysql/ llamado mysql-init.sh.
+- Cree un archivo Dockerfile.mysql para copiar archivos y modificar permisos para ejecutar bash. Con esto puedo acceder al servicio mysql.
+- En el archivo docker-compose asigne el dockerfile correspondiente.
+- Dentro del container del mysql, ejecutar la siguiente instruccion:
+    CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password by 'root';
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+- Con esto ya deberia funcionar phpmyadmin 
